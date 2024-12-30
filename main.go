@@ -16,7 +16,19 @@ func main() {
 		fmt.Print(prompt)
 		scanner.Scan()
 		input := cleanInput(scanner.Text())
-		fmt.Println("Your command was:", input[0])
+
+		// is a valid command?
+		cmd, ok := getCommands()[input[0]]
+		if ok {
+			err := cmd.callback()
+			if err != nil {
+				fmt.Println(err)		
+			}
+			continue
+		} else {
+			fmt.Println("Unknown command")
+			continue
+		}
 	}
 }
 
