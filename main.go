@@ -1,10 +1,10 @@
 package main
 
 import (
-	"fmt"
-	"strings"
 	"bufio"
+	"fmt"
 	"os"
+	"strings"
 )
 
 const prompt string = "Pokedex > "
@@ -22,7 +22,7 @@ func main() {
 		if ok {
 			err := cmd.callback()
 			if err != nil {
-				fmt.Println(err)		
+				fmt.Println(err)
 			}
 			continue
 		} else {

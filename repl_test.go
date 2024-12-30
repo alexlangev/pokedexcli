@@ -5,25 +5,25 @@ import (
 )
 
 type testCase struct {
-	input		string
-	expected	[]string
+	input    string
+	expected []string
 }
 
 func TestCleanInput(t *testing.T) {
-	cases := []testCase {
+	cases := []testCase{
 		{
-			input: "  hello world  ",
+			input:    "  hello world  ",
 			expected: []string{"hello", "world"},
 		},
 		{
-			input: "",
+			input:    "",
 			expected: []string{},
 		},
 	}
 
 	for _, c := range cases {
 		actual := cleanInput(c.input)
-		
+
 		if len(actual) != len(c.expected) {
 			t.Fatalf("the lengths of cases and cleaned inputs don't match")
 		}
