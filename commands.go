@@ -1,12 +1,12 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
-	"os"
-	"net/http"
 	"io"
 	"log"
-	"encoding/json"
+	"net/http"
+	"os"
 )
 
 type cliCommand struct {
@@ -16,13 +16,15 @@ type cliCommand struct {
 }
 
 type location struct {
+	Name string `json:"name"`
+	URL  string `json:"url"`
+}
+
+type locationResponse struct {
 	Count    int    `json:"count"`
 	Next     string `json:"next"`
 	Previous any    `json:"previous"`
-	Results  []struct {
-		Name string `json:"name"`
-		URL  string `json:"url"`
-	}
+	Results  []location
 }
 
 func getCommands() map[string]cliCommand {
@@ -62,13 +64,18 @@ func commandMap() error {
 		log.Fatal(err)
 	}
 
-	locations := location{}
-	err = json.Unmarshal(body, &locations)
+	// Decode the JSON into a go struct
+	decRes := locationResponse{}
+	err = json.Unmarshal(body, &decRes)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	fmt.Printf("%s", locations)
+	for _, loc := range decRes.Results {
+		fmt.Println(loc.Name)
+	}
+
+	// fmt.Println("DecRes.Results\n\n\n", decRes.Results[0].Name, decRes.Results[0].URL)
 
 	return nil
 }
