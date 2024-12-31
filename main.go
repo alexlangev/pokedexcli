@@ -9,7 +9,14 @@ import (
 
 const prompt string = "Pokedex > "
 
+type appState struct {
+	Next string
+	Previous string
+}
+
 func main() {
+	var state appState 
+	state.Next = "https://pokeapi.co/api/v2/location-area/"
 	scanner := bufio.NewScanner(os.Stdin)
 
 	for {
@@ -20,7 +27,7 @@ func main() {
 		// is a valid command?
 		cmd, ok := getCommands()[input[0]]
 		if ok {
-			err := cmd.callback()
+			err := cmd.callback(&state)
 			if err != nil {
 				fmt.Println(err)
 			}

@@ -12,7 +12,7 @@ import (
 type cliCommand struct {
 	name        string
 	description string
-	callback    func() error
+	callback    func(*appState) error
 }
 
 type location struct {
@@ -47,9 +47,9 @@ func getCommands() map[string]cliCommand {
 	}
 }
 
-func commandMap() error {
+func commandMap(state *appState) error {
 	// make a GET to endpoint and handle errors
-	res, err := http.Get("https://pokeapi.co/api/v2/location-area/")
+	res, err := http.Get(state.Next)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -71,16 +71,16 @@ func commandMap() error {
 		log.Fatal(err)
 	}
 
+	state.Next = decRes.Next
+
 	for _, loc := range decRes.Results {
 		fmt.Println(loc.Name)
 	}
 
-	// fmt.Println("DecRes.Results\n\n\n", decRes.Results[0].Name, decRes.Results[0].URL)
-
 	return nil
 }
 
-func commandHelp() error {
+func commandHelp(state *appState) error {
 	fmt.Println("Welcome to the Pokedex!")
 	fmt.Println("Usage: ")
 	fmt.Println()
@@ -93,7 +93,7 @@ func commandHelp() error {
 	return nil
 }
 
-func commandExit() error {
+func commandExit(state *appState) error {
 	fmt.Println("Closing the Pokedex... Goodbye!")
 	os.Exit(0) // 0 means success by convention
 	return nil
