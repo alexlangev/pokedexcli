@@ -17,6 +17,7 @@ type appState struct {
 func main() {
 	var state appState 
 	state.Next = "https://pokeapi.co/api/v2/location-area/"
+	state.Previous = ""
 	scanner := bufio.NewScanner(os.Stdin)
 
 	for {
