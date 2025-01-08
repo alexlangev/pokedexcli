@@ -10,12 +10,12 @@ import (
 const prompt string = "Pokedex > "
 
 type appState struct {
-	Next string
+	Next     string
 	Previous string
 }
 
 func main() {
-	var state appState 
+	var state appState
 	state.Next = "https://pokeapi.co/api/v2/location-area/"
 	state.Previous = ""
 	scanner := bufio.NewScanner(os.Stdin)
