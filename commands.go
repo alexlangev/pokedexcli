@@ -7,7 +7,9 @@ import (
 	"log"
 	"net/http"
 	"os"
-	// "strconv"
+	"strconv"
+
+	"github.com/alexlangev/pokedexcli/internal/pokeapi"
 )
 
 type cliCommand struct {
@@ -53,7 +55,7 @@ func getCommands() map[string]cliCommand {
 	}
 }
 
-func commandMap(state *appState) error {
+func commandMap(state *appState, c *cacheEntry) error {
 	// make a GET to endpoint and handle errors
 	res, err := http.Get(state.Next)
 	if err != nil {
@@ -69,6 +71,9 @@ func commandMap(state *appState) error {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	// add body to cache
+	c.cache.Add(url, body)
 
 	// Decode the JSON into a go struct
 	decRes := locationResponse{}
