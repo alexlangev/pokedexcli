@@ -1,48 +1,16 @@
 package main
 
 import (
-	"bufio"
-	"fmt"
-	"os"
-	"strings"
+	"time"
+
+	"github.com/alexlangev/pokedexcli/internal/pokeapi"
 )
 
-const prompt string = "Pokedex > "
-
-type appState struct {
-	Next     string
-	Previous string
-}
-
 func main() {
-	var state appState
-	state.Next = "https://pokeapi.co/api/v2/location-area/"
-	state.Previous = ""
-	scanner := bufio.NewScanner(os.Stdin)
-
-	for {
-		fmt.Print(prompt)
-		scanner.Scan()
-		input := cleanInput(scanner.Text())
-
-		// is a valid command?
-		cmd, ok := getCommands()[input[0]]
-		if ok {
-			err := cmd.callback(&state)
-			if err != nil {
-				fmt.Println(err)
-			}
-			continue
-		} else {
-			fmt.Println("Unknown command")
-			continue
-		}
+	pokeClient := pokeapi.NewClient(5*time.Second, time.Minute*5)
+	cfg := &config{
+		pokeapiClient: pokeClient,
 	}
-}
 
-// Split the users input into words and sanitize
-func cleanInput(text string) []string {
-	words := strings.Fields(strings.ToLower(text))
-
-	return words
+	startRepl(cfg)
 }
